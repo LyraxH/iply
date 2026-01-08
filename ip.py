@@ -1,6 +1,13 @@
+import os
 import json
 import requests
 import subprocess
+from dotenv import load_dotenv
+
+load_dotenv()
+VT_API_KEY = os.getenv('VT_API_KEY')
+if not VT_API_KEY:
+    print('No API key found')
 
 toDo = input('(g)et, (f)ind, (s)ceure, (v)erbose \n what do: ')
 subprocess.run(["clear"])
