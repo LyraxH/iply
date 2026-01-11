@@ -48,37 +48,45 @@ def get_rep(toGet):
         return None
 
 def main():
-    toDo = input('(g)et, (f)ind, (s)ecurity, (v)erbose \n what do: ')
-    subprocess.run(["clear"])
-    match (toDo):
-        case "g": #prints current ip
-            result = subprocess.run(['curl', 'https://api.ipify.org'], capture_output=True, text=True)
-            print('your ip:',result.stdout)
-        case "f":
-            toGet = input('(m)ine\ninput ip: ')
-            if toGet == 'm':
-                toGet = get_IP()
-            r = requests.get(f'http://ip-api.com/json/{toGet}')
-            data = r.json()
-            subprocess.run(["clear"])
-            print('Results:')
-            print(f'IP:  {data['query']}')
-            print(f'City:  {data['city']}')
-            print(f'Region:  {data['regionName']}')
-            print(f'Country:  {data['country']}')
-            print(f'Zip:  {data['zip']}')
-            print(f'ISP:  {data['isp']}')
-            print(f'as: {data['as']}')
-        case "s":
-            toGet = input('input ip: ')
-            get_rep(toGet)
-        case "v": #prints any ip (or yours) everything
-            toGet = input('(m)ine\ninput ip: ')
-            if toGet == 'm':
-                toGet = get_IP()
-            r = requests.get(f'http://ip-api.com/json/{toGet}')
-            data = r.json()
-            print(data)
+    while True:
+        toDo = input('(g)et, (f)ind, (s)ecurity, (v)erbose (q)uit \n what do: ').lower()
+        subprocess.run(["clear"])
+        match (toDo):
+            case "g": #prints current ip
+                result = subprocess.run(['curl', 'https://api.ipify.org'], capture_output=True, text=True)
+                print('your ip:',result.stdout)
+            case "f":
+                toGet = input('(m)ine\ninput ip: ')
+                if toGet == 'm':
+                    toGet = get_IP()
+                r = requests.get(f'http://ip-api.com/json/{toGet}')
+                data = r.json()
+                subprocess.run(["clear"])
+                print('Results:')
+                print(f'IP:  {data['query']}')
+                print(f'City:  {data['city']}')
+                print(f'Region:  {data['regionName']}')
+                print(f'Country:  {data['country']}')
+                print(f'Zip:  {data['zip']}')
+                print(f'ISP:  {data['isp']}')
+                print(f'as: {data['as']}')
+                input("\nPress Enter to return to menu...")
+            case "s":
+                toGet = input('input ip: ')
+                get_rep(toGet)
+                input("\nPress Enter to return to menu...")
+            case "v": #prints any ip (or yours) everything
+                toGet = input('(m)ine\ninput ip: ')
+                if toGet == 'm':
+                    toGet = get_IP()
+                r = requests.get(f'http://ip-api.com/json/{toGet}')
+                data = r.json()
+                print(data)
+                input("\nPress Enter to return to menu...")
+            case "q":
+                break
+            case _:
+                print("Invalid option. Please try again.")
 
 if __name__ == '__main__':
     main()
