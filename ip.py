@@ -37,10 +37,19 @@ def get_rep(toGet):
         country = info.get('country', 'Unknown Country')
         continent = info.get('continent', 'Unknown Continent')
         reputation = info.get('reputation', 0)
-        print(f"Owner: {owner} | Location: {country}, {continent} | Reputation: {reputation}")
-        print(f"{RED}Malicious: {malicious_count}{RESET}")
-        print(f"{YELLOW}Suspicious: {suspicious_count}{RESET}")
-        print(f"{GREEN}Harmless: {harmless_count}{RESET}")
+        print(f"--- Analysis for {toGet} ---")
+        print(f"Owner: {owner}")
+        print(f"Location: {country}, {continent}")
+        print(f"Reputation: ({reputation})")
+        print(f"Malicious: {malicious_count} | Suspicious: {suspicious_count} | Harmless: {harmless_count}")
+        if (malicious_count >= 3 or reputation <= -10):
+            print(f"{RED}Verdict: IP is dangerous{RESET}")
+        elif (malicious_count > 0 or reputation < 0):
+            print(f"{YELLOW}Verdict: IP is suspicious{RESET}")
+        elif (harmless_count >= 3 or reputation >= 3):
+            print(f"{GREEN}Verdict: IP is harmless{RESET}")
+        else:
+            print(f"Unknown IP: Lack of data")
         return
     elif r.status_code == 401:
         print('Invalid API key')
