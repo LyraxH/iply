@@ -9,6 +9,11 @@ VT_API_KEY = os.getenv('VT_API_KEY')
 if not VT_API_KEY:
     print('No API key found')
 
+RED = "\033[38;2;255;0;0m"
+GREEN = "\033[38;2;0;255;0m"
+YELLOW = "\033[38;2;255;255;0m"
+RESET = "\033[0m"
+
 def get_IP():
     result = subprocess.run(['curl', 'https://api.ipify.org'], capture_output=True, text=True)
     return result.stdout
@@ -29,11 +34,14 @@ def get_rep(toGet):
         suspicious_count = stats.get('suspicious', 0)
         harmless_count = stats.get('harmless', 0)
         owner = info.get('as_owner', 'Unknown Owner')
-        print(f"Owner: {owner}")
-        print(f"Malicious: {malicious_count}")
-        print(f"Suspicious: {suspicious_count}")
-        print(f"Harmless: {harmless_count}")
-        return data
+        country = info.get('country', 'Unknown Country')
+        continent = info.get('continent', 'Unknown Continent')
+        reputation = info.get('reputation', 0)
+        print(f"Owner: {owner} | Location: {country}, {continent} | Reputation: {reputation}")
+        print(f"{RED}Malicious: {malicious_count}{RESET}")
+        print(f"{YELLOW}Suspicious: {suspicious_count}{RESET}")
+        print(f"{GREEN}Harmless: {harmless_count}{RESET}")
+        return
     elif r.status_code == 401:
         print('Invalid API key')
         return None
