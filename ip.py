@@ -39,6 +39,7 @@ def analyze_ip_security(target_ip: str) -> dict | None:
             data = r.json()
             info = data.get('data', {}).get('attributes', {})
             stats = info.get('last_analysis_stats', {})
+            tags = info.get('tags', [])
             malicious_count = stats.get('malicious', 0)
             suspicious_count = stats.get('suspicious', 0)
             harmless_count = stats.get('harmless', 0)
@@ -53,7 +54,8 @@ def analyze_ip_security(target_ip: str) -> dict | None:
                 'reputation': reputation,
                 'malicious_count': malicious_count,
                 'suspicious_count': suspicious_count,
-                'harmless_count': harmless_count
+                'harmless_count': harmless_count,
+                'tags': tags
             }
         elif r.status_code == 401:
             raise RuntimeError("Invalid API Key")
@@ -109,6 +111,10 @@ def main():
                         print(f"{GREEN}Verdict: IP is harmless{RESET}")
                     else:
                         print(f"Unknown IP: Lack of data")
+                    vpn_indicators = ['vpn', 'proxy', 'tor', 'hosting']
+                    found_tags = [t for t in results['tags'] if t in vpn_indicators]
+                    if found_tags:
+                        print(f"{YELLOW}VPN/Proxy Indicators Found: {', '.join(found_tags)}{RESET}")
                 input("\nPress Enter to return to menu...")
             case 'v':
                 target_ip = input('(m)ine\ninput ip: ')
